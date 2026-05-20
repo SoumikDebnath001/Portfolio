@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FiMenu, FiX } from "react-icons/fi";
+import { motion, AnimatePresence } from "framer-motion";
 
 const navLinks = [
   { label: "About Me", href: "#about" },
@@ -13,17 +14,9 @@ const navLinks = [
   { label: "Contact", href: "#mail" },
 ];
 
-export default function Hero({
-  mobileWhiteHueLeft = "1",   // Intensity/opacity of the white hue on the left (e.g. 0.9)
-  mobileWhiteHueMiddle = "0.6", // Intensity/opacity of the white hue in the middle (e.g. 0.5)
-}: {
-  mobileWhiteHueLeft?: string | number;
-  mobileWhiteHueMiddle?: string | number;
-}) {
+export default function Hero() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [displayedText, setDisplayedText] = useState("");
-  const [isDeleting, setIsDeleting] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
   const [textIndex, setTextIndex] = useState(0);
 
   const texts = [
@@ -116,20 +109,28 @@ export default function Hero({
         </div>
 
         {/* Mobile menu */}
-        {menuOpen && (
-          <div className="md:hidden absolute top-full left-0 right-0 bg-base/95 backdrop-blur-md border-t border-border px-5 py-4 flex flex-col gap-1">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                onClick={() => setMenuOpen(false)}
-                className="text-primary text-sm font-normal py-3 border-b border-border/40 last:border-0 no-underline tracking-[0.01em]"
-              >
-                {link.label}
-              </a>
-            ))}
-          </div>
-        )}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="md:hidden absolute top-full left-0 right-0 bg-base/95 backdrop-blur-md border-t border-border px-5 py-4 flex flex-col gap-1 overflow-hidden"
+            >
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  onClick={() => setMenuOpen(false)}
+                  className="text-primary text-sm font-normal py-3 border-b border-border/40 last:border-0 no-underline tracking-[0.01em]"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* ── Left vertical label (desktop only) ── */}
@@ -141,27 +142,86 @@ export default function Hero({
 
       {/* ── Portrait ── */}
       {/* Desktop: right 56% */}
-      <div className="hidden md:block absolute top-0 right-0 h-full w-[56%]">
-        <Image src="/portrait.png" alt="Portrait" fill priority sizes="56vw" className="object-cover object-top" />
-        <div className="absolute inset-y-0 left-0 w-32 pointer-events-none bg-linear-to-r from-base to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-32 pointer-events-none bg-linear-to-b from-transparent to-base" />
+      <div className="hidden md:flex absolute top-0 right-0 h-full w-[56%] items-center justify-center">
+        {/* Decorative background glow behind the circular image */}
+        <div className="absolute w-[500px] h-[500px] bg-neutral-200/30 rounded-full blur-3xl -z-10 pointer-events-none" />
+
+        {/* Circular Portrait Image */}
+        <div className="relative w-80 h-80 lg:w-[450px] lg:h-[450px] rounded-full overflow-hidden border-4 border-white shadow-[0_15px_45px_rgba(0,0,0,0.08)] bg-neutral-100">
+          <Image
+            src="/portrait.png"
+            alt="Portrait"
+            fill
+            priority
+            sizes="(min-width: 768px) 320px, 450px"
+            className="object-cover object-top grayscale hover:grayscale-0 transition-all duration-500 ease-in-out"
+          />
+        </div>
       </div>
-      {/* Mobile: full-screen with white hue gradient */}
-      <div className="md:hidden absolute inset-0">
-        <Image src="/portrait.png" alt="Portrait" fill priority sizes="100vw" className="object-cover object-top w-auto" />
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: `linear-gradient(to right, rgba(255, 255, 255, ${mobileWhiteHueLeft}) 0%, rgba(255, 255, 255, ${mobileWhiteHueMiddle}) 50%, rgba(255, 255, 255, 0) 100%)`
-          }}
-        />
+      {/* Mobile View Container */}
+      <div className="md:hidden flex flex-col items-center justify-between h-full pt-24 pb-8 px-6 relative z-10">
+        {/* Decorative background glow behind the circular image */}
+        <div className="absolute top-[35%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-neutral-200/40 rounded-full blur-2xl -z-10 pointer-events-none" />
+
+        {/* Top/Middle Section: Circle Image & Text */}
+        <div className="flex-1 flex flex-col items-center justify-center gap-6 w-full">
+          {/* Circular Portrait Image */}
+          <div className="relative w-56 h-56 sm:w-64 sm:h-64 rounded-full overflow-hidden border-4 border-white shadow-[0_10px_30px_rgba(0,0,0,0.08)] bg-neutral-100 flex-shrink-0">
+            <Image
+              src="/portrait.png"
+              alt="Portrait"
+              fill
+              priority
+              sizes="(max-width: 640px) 224px, 256px"
+              className="object-cover object-top grayscale hover:grayscale-0 transition-all duration-500 ease-in-out"
+            />
+          </div>
+
+          {/* Centered Greeting Text */}
+          <div className="text-center flex flex-col items-center max-w-sm">
+            <h1
+              className="text-primary font-sans font-bold leading-none tracking-[-0.03em] mb-2"
+              style={{ fontSize: "clamp(36px, 10vw, 48px)" }}
+            >
+              Hi
+            </h1>
+            <h2
+              className="text-primary font-sans font-normal tracking-[-0.02em] leading-tight mb-3"
+              style={{ fontSize: "clamp(20px, 5.5vw, 24px)" }}
+            >
+              It&apos;s <span className="font-playfair font-semibold">Soumik Debnath</span>
+            </h2>
+
+            {/* Typing indicator & text */}
+            <div className="inline-flex items-center justify-center bg-white/60 backdrop-blur-xs border border-border/50 px-4 py-1.5 rounded-full shadow-xs min-h-[36px]">
+              <p className="text-black text-sm font-semibold tracking-[0.01em] whitespace-nowrap">
+                {displayedText}
+                <span className="animate-pulse text-black ml-0.5">|</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom Section: Logos and Scroll down */}
+        <div className="flex flex-col items-center gap-4 w-full mt-auto">
+          {/* Logos */}
+          <div className="flex items-center justify-center gap-2.5">
+            <Image src="/Developer.png" alt="Developer" width={150} height={50} className="object-contain w-auto h-auto" />
+            <Image src="/GenAi.png" alt="Generative AI" width={85} height={36} className="object-contain w-auto h-auto" />
+          </div>
+
+          {/* Scroll down */}
+          <a
+            href="#about"
+            className="flex items-center gap-1.5 text-secondary hover:text-primary text-[13px] font-medium tracking-[0.05em] uppercase transition-colors duration-200 no-underline"
+          >
+            Scroll down <span className="animate-bounce text-[11px]">↓</span>
+          </a>
+        </div>
       </div>
 
-      {/* ── Hello heading ── */}
-      {/* Desktop */}
+      {/* ── Hello heading (Desktop only) ── */}
       <div className="hidden md:block absolute z-20 left-13 top-1/2 -translate-y-1/2">
-        {/* Logos container positioned relatively above Hello */}
-
         <h1
           className="text-primary font-playfair font-normal leading-[0.88] tracking-[-0.03em]"
           style={{ fontSize: "clamp(180px, 22vw, 300px)" }}
@@ -177,37 +237,13 @@ export default function Hero({
           <span className="animate-pulse text-black">|</span>
         </p>
       </div>
-      {/* Mobile */}
-      <div className="md:hidden absolute z-20 left-5 bottom-35">
-        <h1
-          className="text-primary font-sans font-bold leading-[0.88] tracking-[-0.03em] mb-2"
-          style={{ fontSize: "clamp(50px, 16vw, 120px)" }}
-        >
-          Hi
-        </h1>
-        <h2
-          className="text-primary font-sans font-normal tracking-[-0.02em] leading-tight mb-2"
-          style={{ fontSize: "clamp(25px, 8vw, 60px)" }}
-        >
-          It&apos;s <span className="font-playfair font-semibold">Soumik Debnath,</span>
-        </h2>
-        <p className="text-black text-sm font-semibold tracking-[0.01em] leading-relaxed max-w-xs min-h-6">
-          {displayedText}
-          <span className="animate-pulse text-black">|</span>
-        </p>
-      </div>
 
-      {/* ── Scroll down ── */}
-      <div className="absolute z-20 left-1 md:left-6 bottom-1 md:bottom-8 flex flex-col">
+      {/* ── Scroll down (Desktop only) ── */}
+      <div className="hidden md:flex absolute z-20 left-6 bottom-8 flex-col">
         {/* Desktop Logos just above Scroll Down */}
-        <div className="hidden md:flex items-center gap-2.5 mb-4">
+        <div className="flex items-center gap-2.5 mb-4">
           <Image src="/Developer.png" alt="Developer" width={400} height={132} className="object-contain w-auto h-auto" />
           <Image src="/GenAi.png" alt="Generative AI" width={300} height={132} className="object-contain w-auto h-auto" />
-        </div>
-        {/* Mobile Logos just above Scroll Down */}
-        <div className="md:hidden flex items-center gap-2.5">
-          <Image src="/Developer.png" alt="Developer" width={150} height={50} className="object-contain w-auto h-auto" />
-          <Image src="/GenAi.png" alt="Generative AI" width={85} height={36} className="object-contain w-auto h-auto" />
         </div>
         <a
           href="#about"
