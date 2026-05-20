@@ -180,13 +180,13 @@ export default function Hero({
       {/* Mobile */}
       <div className="md:hidden absolute z-20 left-5 bottom-35">
         <h1
-          className="text-primary font-sniglet font-bold leading-[0.88] tracking-[-0.03em] mb-2"
+          className="text-primary font-sans font-bold leading-[0.88] tracking-[-0.03em] mb-2"
           style={{ fontSize: "clamp(50px, 16vw, 120px)" }}
         >
-          Hi <img className=" inline" src="/handwave.png" alt="" />
+          Hi
         </h1>
         <h2
-          className="text-primary font-sniglet font-normal tracking-[-0.02em] leading-tight mb-2"
+          className="text-primary font-sans font-normal tracking-[-0.02em] leading-tight mb-2"
           style={{ fontSize: "clamp(25px, 8vw, 60px)" }}
         >
           It&apos;s <span className="font-playfair font-semibold">Soumik Debnath,</span>

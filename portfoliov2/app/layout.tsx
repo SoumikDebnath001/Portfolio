@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, Sniglet } from "next/font/google";
+import { Inter, Playfair_Display } from "next/font/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
@@ -16,12 +16,6 @@ const playfair = Playfair_Display({
   style: ["normal", "italic"],
 });
 
-const sniglet = Sniglet({
-  variable: "--font-sniglet",
-  subsets: ["latin"],
-  weight: ["400", "800"],
-});
-
 export const metadata: Metadata = {
   title: "Soumik Debnath",
   description: "Personal portfolio of Soumik Debnath",
@@ -33,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} ${sniglet.variable}`}>
+    <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body>
         {children}
         <SpeedInsights />
