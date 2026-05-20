@@ -141,20 +141,20 @@ export default function Hero() {
       </div>
       {/* Mobile: full-screen with white hue gradient */}
       <div className="md:hidden absolute inset-0">
-        <Image src="/portrait.png" alt="Portrait" fill priority sizes="100vw" className="object-cover object-top" />
+        <Image src="/portrait.png" alt="Portrait" fill priority sizes="100vw" className="object-cover object-top w-auto" />
         <div className="absolute inset-0 pointer-events-none bg-linear-to-r from-white/90 via-white/50 to-transparent" />
       </div>
 
       {/* ── Logos (desktop only) ── */}
       <div className="hidden md:flex absolute z-20 items-center left-10 top-[13%] gap-5">
-        <Image src="/Developer.png" alt="Developer" width={400} height={132} className="object-contain h-auto" />
-        <Image src="/GenAi.png" alt="Generative AI" width={300} height={132} className="object-contain h-auto" />
+        <Image src="/Developer.png" alt="Developer" width={400} height={132} className="object-contain w-auto h-auto" />
+        <Image src="/GenAi.png" alt="Generative AI" width={300} height={132} className="object-contain w-auto h-auto" />
       </div>
 
       {/* Mobile Logos */}
       <div className="md:hidden flex absolute z-20 items-center left-2 bottom-16 gap-2">
-        <Image src="/Developer.png" alt="Developer" width={150} height={66} className="object-contain h-auto" />
-        <Image src="/GenAi.png" alt="Generative AI" width={100} height={66} className="object-contain h-auto" />
+        <Image src="/Developer.png" alt="Developer" width={150} height={66} className="object-contain w-auto h-auto" />
+        <Image src="/GenAi.png" alt="Generative AI" width={100} height={66} className="object-contain w-auto h-auto" />
       </div>
 
       {/* ── Hello heading ── */}
