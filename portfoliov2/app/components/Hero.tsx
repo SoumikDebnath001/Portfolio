@@ -78,7 +78,7 @@ export default function Hero() {
           <div className="flex items-center gap-4 md:gap-6">
             <a
               href="/"
-              className="text-primary text-[14px] font-bold tracking-[0.08em] uppercase hover:opacity-70 transition-opacity duration-200"
+              className="flex items-center gap-2 text-primary text-[14px] font-bold tracking-[0.08em] uppercase hover:opacity-70 transition-opacity duration-200"
             >
               SD.
             </a>
