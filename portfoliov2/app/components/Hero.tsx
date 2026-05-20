@@ -143,17 +143,17 @@ export default function Hero() {
       {/* ── Portrait ── */}
       {/* Desktop: right 56% */}
       <div className="hidden md:flex absolute top-0 right-0 h-full w-[56%] items-center justify-center">
-        {/* Decorative background glow behind the circular image */}
-        <div className="absolute w-[500px] h-[500px] bg-neutral-200/30 rounded-full blur-3xl -z-10 pointer-events-none" />
+        {/* Decorative background glow */}
+        <div className="absolute w-[50%] aspect-square max-w-[500px] bg-neutral-200/30 rounded-full blur-3xl -z-10 pointer-events-none" />
 
         {/* Circular Portrait Image */}
-        <div className="relative w-80 h-80 lg:w-[450px] lg:h-[450px] rounded-full overflow-hidden border-4 border-white shadow-[0_15px_45px_rgba(0,0,0,0.08)] bg-neutral-100">
+        <div className="relative w-56 h-56 md:w-64 md:h-64 lg:w-[360px] lg:h-[360px] xl:w-[420px] xl:h-[420px] 2xl:w-[450px] 2xl:h-[450px] rounded-full overflow-hidden border-4 border-white shadow-[0_15px_45px_rgba(0,0,0,0.08)] bg-neutral-100">
           <Image
             src="/portrait.png"
             alt="Portrait"
             fill
             priority
-            sizes="(min-width: 768px) 320px, 450px"
+            sizes="(min-width: 1536px) 450px, (min-width: 1280px) 420px, (min-width: 1024px) 360px, (min-width: 768px) 256px"
             className="object-cover object-top grayscale hover:grayscale-0 transition-all duration-500 ease-in-out"
           />
         </div>
@@ -221,33 +221,41 @@ export default function Hero() {
       </div>
 
       {/* ── Hello heading (Desktop only) ── */}
-      <div className="hidden md:block absolute z-20 left-13 top-1/2 -translate-y-1/2">
+      <div className="hidden md:block absolute z-20 left-13 top-1/2 -translate-y-1/2 max-w-[42vw]">
         <h1
           className="text-primary font-playfair font-normal leading-[0.88] tracking-[-0.03em]"
-          style={{ fontSize: "clamp(180px, 22vw, 300px)" }}
+          style={{ fontSize: "clamp(110px, 17vw, 300px)" }}
         >
           Hello
         </h1>
-        <p className="text-primary text-3xl font-normal mt-3.5 tracking-[0.01em] pl-1.75 min-h-12">
+        <p
+          className="text-primary font-normal mt-3.5 tracking-[0.01em] pl-1.75"
+          style={{ fontSize: "clamp(13px, 1.5vw, 30px)" }}
+        >
           <span className="font-playfair text-black">
             <span className="font-normal">It&apos;s </span>
-            <span className="font-semibold text-6xl">Soumik Debnath</span>
-          </span>,{" "}
-          <span className="text-black font-semibold">{displayedText}</span>
-          <span className="animate-pulse text-black">|</span>
+            <span className="font-semibold" style={{ fontSize: "clamp(26px, 3.8vw, 60px)" }}>Soumik Debnath</span>
+          </span>
+        </p>
+        <p
+          className="text-black font-semibold pl-1.75 mt-1 min-h-8"
+          style={{ fontSize: "clamp(13px, 1.5vw, 24px)" }}
+        >
+          {displayedText}
+          <span className="animate-pulse ml-0.5">|</span>
         </p>
       </div>
 
       {/* ── Scroll down (Desktop only) ── */}
-      <div className="hidden md:flex absolute z-20 left-6 bottom-8 flex-col">
+      <div className="hidden md:flex absolute z-20 left-6 bottom-6 md:bottom-8 flex-col">
         {/* Desktop Logos just above Scroll Down */}
-        <div className="flex items-center gap-2.5 mb-4">
-          <Image src="/Developer.png" alt="Developer" width={400} height={132} className="object-contain w-auto h-auto" />
-          <Image src="/GenAi.png" alt="Generative AI" width={300} height={132} className="object-contain w-auto h-auto" />
+        <div className="flex items-center gap-2 md:gap-2.5 mb-3 md:mb-4">
+          <Image src="/Developer.png" alt="Developer" width={400} height={132} className="object-contain h-auto w-[120px] md:w-[160px] lg:w-[220px] xl:w-[300px] 2xl:w-[400px]" />
+          <Image src="/GenAi.png" alt="Generative AI" width={300} height={132} className="object-contain h-auto w-[85px] md:w-[110px] lg:w-[160px] xl:w-[210px] 2xl:w-[300px]" />
         </div>
         <a
           href="#about"
-          className="flex items-center gap-1 text-primary text-3.25 font-normal tracking-[0.01em] no-underline mt-2"
+          className="flex items-center gap-1 text-primary text-3.25 font-normal tracking-[0.01em] no-underline mt-1 md:mt-2"
         >
           Scroll down <span className="text-sm">↓</span>
         </a>
