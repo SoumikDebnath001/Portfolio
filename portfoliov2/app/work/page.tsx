@@ -6,51 +6,60 @@ import { FiArrowLeft, FiExternalLink, FiGithub } from "react-icons/fi";
 
 function BrowserWindow({ siteUrl, title }: { siteUrl: string; title: string }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-      className="flex flex-col rounded-2xl overflow-hidden bg-white w-full"
-      style={{ boxShadow: "0 30px 60px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)" }}
-    >
-      {/* Chrome header */}
-      <div className="flex items-center gap-4 px-4.5 py-3 bg-[#F4F4F4] border-b border-[#E5E5E5] select-none">
-        <div className="flex gap-2 shrink-0">
-          <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
-          <div className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
-          <div className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
+    <>
+      {/* Desktop: full browser chrome + iframe */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        className="hidden md:flex flex-col rounded-2xl overflow-hidden bg-white w-full"
+        style={{ boxShadow: "0 30px 60px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)" }}
+      >
+        <div className="flex items-center gap-4 px-4.5 py-3 bg-[#F4F4F4] border-b border-[#E5E5E5] select-none">
+          <div className="flex gap-2 shrink-0">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
+          </div>
+          <a
+            href={siteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-1 items-center justify-center gap-1.5 bg-white rounded-lg px-4 py-1.5 text-2.75 text-[#888] border border-border overflow-hidden whitespace-nowrap text-ellipsis font-mono tracking-[0.03em] no-underline hover:bg-[#F9F9F9] transition-colors"
+          >
+            <span className="text-[#27C93F] text-xs">●</span>
+            {siteUrl.replace("https://", "")}
+          </a>
         </div>
-        <a
-          href={siteUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex flex-1 items-center justify-center gap-1.5 bg-white rounded-lg px-4 py-1.5 text-2.75 text-[#888] border border-border overflow-hidden whitespace-nowrap text-ellipsis font-mono tracking-[0.03em] no-underline hover:bg-[#F9F9F9] transition-colors"
-        >
-          <span className="text-[#27C93F] text-xs">●</span>
-          {siteUrl.replace("https://", "")}
-        </a>
-      </div>
+        <div className="relative w-full h-145 overflow-hidden bg-[#FAFAFA]">
+          <iframe
+            src={siteUrl}
+            className="w-full h-full border-none block bg-white"
+            title={`${title} Desktop Preview`}
+          />
+        </div>
+      </motion.div>
 
-      {/* iframe — desktop only */}
-      <div className="hidden md:block relative w-full h-145 overflow-hidden bg-[#FAFAFA]">
-        <iframe
-          src={siteUrl}
-          className="w-full h-full border-none block bg-white"
-          title={`${title} Desktop Preview`}
-        />
-      </div>
-
-      {/* Mobile: tap-to-visit placeholder */}
-      <a
+      {/* Mobile: simple clickable preview card */}
+      <motion.a
         href={siteUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="md:hidden flex items-center justify-center gap-2 py-10 text-secondary text-3.25 font-normal no-underline hover:text-primary transition-colors"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+        className="md:hidden flex items-center justify-between gap-4 px-5 py-4 rounded-2xl bg-white border border-[#E8E8E8] no-underline group active:scale-[0.98] transition-transform duration-150"
+        style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.06)" }}
       >
-        <FiExternalLink size={16} />
-        Tap to visit site
-      </a>
-    </motion.div>
+        <div className="flex items-center gap-3 min-w-0">
+          <span className="w-2 h-2 rounded-full bg-[#27C93F] shrink-0" />
+          <span className="text-[#666] text-3.25 font-mono tracking-[0.02em] truncate">
+            {siteUrl.replace("https://", "")}
+          </span>
+        </div>
+        <FiExternalLink size={16} className="text-[#999] shrink-0 group-active:text-primary transition-colors" />
+      </motion.a>
+    </>
   );
 }
 

@@ -16,8 +16,8 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Portfolio — Product Designer",
-  description: "Personal portfolio of a product designer",
+  title: "Soumik Debnath",
+  description: "Personal portfolio of Soumik Debnath",
 };
 
 export default function RootLayout({
