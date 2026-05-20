@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #222222;
+  --color-secondary: #7B7B7B;
+  --color-base: #F8F8F8;
+  --color-border: #E0E0E0;
+  --font-sans: var(--font-inter);
+}
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-base);
+  color: var(--color-primary);
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
