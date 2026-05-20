@@ -1,10 +1,41 @@
 "use client";
 
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FiArrowLeft, FiExternalLink, FiGithub } from "react-icons/fi";
 
 function BrowserWindow({ siteUrl, title }: { siteUrl: string; title: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(0.25);
+  const [containerHeight, setContainerHeight] = useState(240);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    
+    const updateScale = () => {
+      if (containerRef.current) {
+        const width = containerRef.current.getBoundingClientRect().width;
+        // Target desktop viewport width to load desktop view
+        const desktopWidth = 1280;
+        const newScale = width / desktopWidth;
+        setScale(newScale);
+        
+        // Target visual height for the container on mobile
+        const visualHeight = 240;
+        setContainerHeight(visualHeight);
+      }
+    };
+
+    updateScale();
+    window.addEventListener("resize", updateScale);
+    return () => window.removeEventListener("resize", updateScale);
+  }, []);
+
+  const iframeWidth = 1280;
+  // Calculate original iframe height so that after scaling down, it has visualHeight (e.g. 240px)
+  const iframeHeight = containerHeight / scale;
+
   return (
     <>
       {/* Desktop: full browser chrome + iframe */}
@@ -36,29 +67,41 @@ function BrowserWindow({ siteUrl, title }: { siteUrl: string; title: string }) {
             src={siteUrl}
             className="w-full h-full border-none block bg-white"
             title={`${title} Desktop Preview`}
+            scrolling="no"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           />
         </div>
       </motion.div>
 
-      {/* Mobile: simple clickable preview card */}
-      <motion.a
-        href={siteUrl}
-        target="_blank"
-        rel="noopener noreferrer"
+      {/* Mobile: simple desktop iframe preview scaled down in a div */}
+      <motion.div
+        ref={containerRef}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        className="md:hidden flex items-center justify-between gap-4 px-5 py-4 rounded-2xl bg-white border border-[#E8E8E8] no-underline group active:scale-[0.98] transition-transform duration-150"
-        style={{ boxShadow: "0 4px 16px rgba(0,0,0,0.06)" }}
+        className="md:hidden w-full rounded-2xl overflow-hidden bg-white border border-[#E8E8E8] relative"
+        style={{
+          height: `${containerHeight}px`,
+          boxShadow: "0 8px 24px rgba(0,0,0,0.04)"
+        }}
       >
-        <div className="flex items-center gap-3 min-w-0">
-          <span className="w-2 h-2 rounded-full bg-[#27C93F] shrink-0" />
-          <span className="text-[#666] text-3.25 font-mono tracking-[0.02em] truncate">
-            {siteUrl.replace("https://", "")}
-          </span>
+        <div
+          className="absolute top-0 left-0 origin-top-left"
+          style={{
+            width: `${iframeWidth}px`,
+            height: `${iframeHeight}px`,
+            transform: `scale(${scale})`,
+          }}
+        >
+          <iframe
+            src={siteUrl}
+            className="w-full h-full border-none block bg-white pointer-events-none"
+            title={`${title} Mobile Desktop Preview`}
+            scrolling="no"
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          />
         </div>
-        <FiExternalLink size={16} className="text-[#999] shrink-0 group-active:text-primary transition-colors" />
-      </motion.a>
+      </motion.div>
     </>
   );
 }
