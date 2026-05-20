@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { FiMenu, FiX } from "react-icons/fi";
 
@@ -14,6 +14,60 @@ const navLinks = [
 
 export default function Hero() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [displayedText, setDisplayedText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
+  const [textIndex, setTextIndex] = useState(0);
+  
+  const texts = [
+    "Full Stack Engineer",
+    "Designer",
+    "MERN Stack Developer",
+    "GenAi Developer"
+  ];
+  
+  const fullText = texts[textIndex];
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    let charIndex = 0;
+    let isDeletePhase = false;
+    let isPausedLocal = false;
+
+    const interval = setInterval(() => {
+      if (!isDeletePhase && !isPausedLocal) {
+        // Typing phase
+        if (charIndex <= fullText.length) {
+          setDisplayedText(fullText.slice(0, charIndex));
+          charIndex++;
+        } else {
+          // Finished typing, pause before deleting
+          isPausedLocal = true;
+          timeoutId = setTimeout(() => {
+            isPausedLocal = false;
+            isDeletePhase = true;
+            charIndex = fullText.length;
+          }, 3000);
+        }
+      } else if (isDeletePhase && !isPausedLocal) {
+        // Deleting phase
+        if (charIndex > 0) {
+          charIndex--;
+          setDisplayedText(fullText.slice(0, charIndex));
+        } else {
+          // Finished deleting, move to next text
+          isDeletePhase = false;
+          charIndex = 0;
+          setTextIndex((prev) => (prev + 1) % texts.length);
+        }
+      }
+    }, 50);
+
+    return () => {
+      clearInterval(interval);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [fullText, texts.length]);
 
   return (
     <div className="relative h-screen bg-base overflow-hidden">
@@ -85,16 +139,22 @@ export default function Hero() {
         <div className="absolute inset-y-0 left-0 w-32 pointer-events-none bg-linear-to-r from-base to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-32 pointer-events-none bg-linear-to-b from-transparent to-base" />
       </div>
-      {/* Mobile: full-screen background */}
+      {/* Mobile: full-screen with white hue gradient */}
       <div className="md:hidden absolute inset-0">
         <Image src="/portrait.png" alt="Portrait" fill priority sizes="100vw" className="object-cover object-top" />
-        <div className="absolute inset-x-0 bottom-0 h-[65%] pointer-events-none bg-linear-to-t from-base via-base/80 to-transparent" />
+        <div className="absolute inset-0 pointer-events-none bg-linear-to-r from-white/90 via-white/50 to-transparent" />
       </div>
 
       {/* ── Logos (desktop only) ── */}
       <div className="hidden md:flex absolute z-20 items-center left-10 top-[13%] gap-5">
         <Image src="/Developer.png" alt="Developer" width={400} height={132} className="object-contain h-auto" />
         <Image src="/GenAi.png" alt="Generative AI" width={300} height={132} className="object-contain h-auto" />
+      </div>
+
+      {/* Mobile Logos */}
+      <div className="md:hidden flex absolute z-20 items-center left-2 bottom-16 gap-2">
+        <Image src="/Developer.png" alt="Developer" width={150} height={66} className="object-contain h-auto" />
+        <Image src="/GenAi.png" alt="Generative AI" width={100} height={66} className="object-contain h-auto" />
       </div>
 
       {/* ── Hello heading ── */}
@@ -106,21 +166,24 @@ export default function Hero() {
         >
           Hello
         </h1>
-        <p className="text-primary text-3xl font-normal mt-3.5 tracking-[0.01em] pl-1.75">
-          It&apos;s Soumik Debnath, a Full Stack Engineer
+        <p className="text-primary text-3xl font-normal mt-3.5 tracking-[0.01em] pl-1.75 min-h-12">
+          It&apos;s Soumik Debnath, {displayedText}
+          <span className="animate-pulse">|</span>
         </p>
       </div>
       {/* Mobile */}
-      <div className="md:hidden absolute z-20 left-5 right-5 bottom-24">
+      <div className="md:hidden absolute z-20 left-5 bottom-40">
         <h1
-          className="text-primary font-extralight leading-[0.88] tracking-[-0.03em] mb-3"
-          style={{ fontSize: "clamp(80px, 22vw, 140px)" }}
+          className="text-primary font-bold leading-[0.88] tracking-[-0.03em] mb-3"
+          style={{ fontSize: "clamp(50px, 16vw, 120px)" }}
         >
           Hello
         </h1>
-        <p className="text-primary text-lg font-normal tracking-[0.01em]">
+        <p className="text-primary text-sm font-normal tracking-[0.01em] leading-relaxed max-w-xs min-h-12">
           It&apos;s Soumik Debnath,
-          <br />a Full Stack Engineer
+          <br />
+          {displayedText}
+          <span className="animate-pulse">|</span>
         </p>
       </div>
 

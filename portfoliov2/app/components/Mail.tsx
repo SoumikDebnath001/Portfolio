@@ -24,7 +24,7 @@ function Perforations({ position }: { position: "top" | "bottom" }) {
   return (
     <div className={`absolute ${position}-0 left-3 right-3 flex justify-between pointer-events-none z-10`}>
       {Array.from({ length: 28 }).map((_, i) => (
-        <div key={i} className="w-[5px] h-[5px] rounded-full bg-base shrink-0" />
+        <div key={i} className="w-1.25 h-1.25 rounded-full bg-base shrink-0" />
       ))}
     </div>
   );
@@ -154,7 +154,7 @@ export default function Mail() {
 
                 {/* From + Name — stacked on mobile, side-by-side on desktop */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div className="flex flex-col gap-[7px]">
+                  <div className="flex flex-col gap-1.75">
                     <label className="text-[8px] font-medium tracking-[0.22em] text-secondary">FROM</label>
                     <input
                       type="email" required placeholder="your@email.com"
@@ -163,7 +163,7 @@ export default function Mail() {
                       className={`${inputCls} ${focusBorder("email")}`}
                     />
                   </div>
-                  <div className="flex flex-col gap-[7px]">
+                  <div className="flex flex-col gap-1.75">
                     <label className="text-[8px] font-medium tracking-[0.22em] text-secondary">NAME</label>
                     <input
                       type="text" required placeholder="Your name"
@@ -175,7 +175,7 @@ export default function Mail() {
                 </div>
 
                 {/* Subject */}
-                <div className="flex flex-col gap-[7px]">
+                <div className="flex flex-col gap-1.75">
                   <label className="text-[8px] font-medium tracking-[0.22em] text-secondary">RE: SUBJECT</label>
                   <input
                     type="text" placeholder="What's this about?"
@@ -186,7 +186,7 @@ export default function Mail() {
                 </div>
 
                 {/* Message */}
-                <div className="flex flex-col gap-[7px] flex-1">
+                <div className="flex flex-col gap-1.75 flex-1">
                   <label className="text-[8px] font-medium tracking-[0.22em] text-secondary">MESSAGE</label>
                   <textarea
                     required rows={6} placeholder="Write your message here…"
@@ -203,11 +203,11 @@ export default function Mail() {
                   <button
                     type="submit"
                     disabled={isBlocked}
-                    className="inline-flex items-center gap-2 px-5 py-[9px] bg-primary text-white text-[10px] font-medium tracking-[0.2em] rounded-sm transition-all duration-200 hover:bg-[#3a3a3a] hover:-translate-y-px disabled:opacity-40 disabled:cursor-not-allowed disabled:translate-y-0"
+                    className="inline-flex items-center gap-2 px-5 py-2.25 bg-primary text-white text-[10px] font-medium tracking-[0.2em] rounded-sm transition-all duration-200 hover:bg-[#3a3a3a] hover:-translate-y-px disabled:opacity-40 disabled:cursor-not-allowed disabled:translate-y-0"
                   >
                     {status === "sending" ? (
                       <>
-                        <span className="w-[10px] h-[10px] border border-white/30 border-t-white rounded-full animate-spin inline-block" />
+                        <span className="w-2.5 h-2.5 border border-white/30 border-t-white rounded-full animate-spin inline-block" />
                         SENDING…
                       </>
                     ) : status === "success" ? "SENT ✓" : "SEND ↗"}
@@ -215,7 +215,7 @@ export default function Mail() {
                   <button
                     type="button"
                     onClick={() => { setName(""); setEmail(""); setSubject(""); setMessage(""); setStatus("idle"); }}
-                    className="text-secondary text-[10px] tracking-[0.18em] px-1 py-[9px] bg-transparent border-none cursor-pointer transition-colors duration-200 hover:text-primary"
+                    className="text-secondary text-[10px] tracking-[0.18em] px-1 py-2.25 bg-transparent border-none cursor-pointer transition-colors duration-200 hover:text-primary"
                   >
                     CLEAR
                   </button>
