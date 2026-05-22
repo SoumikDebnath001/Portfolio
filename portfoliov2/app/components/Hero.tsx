@@ -16,6 +16,19 @@ const navLinks = [
 
 export default function Hero() {
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleMobileNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      setMenuOpen(false);
+      setTimeout(() => {
+        const el = document.querySelector(href);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      }, 320);
+    } else {
+      setMenuOpen(false);
+    }
+  };
   const [displayedText, setDisplayedText] = useState("");
   const [textIndex, setTextIndex] = useState(0);
 
@@ -122,7 +135,7 @@ export default function Hero() {
                 <a
                   key={link.label}
                   href={link.href}
-                  onClick={() => setMenuOpen(false)}
+                  onClick={(e) => handleMobileNavClick(e, link.href)}
                   className="text-primary text-sm font-normal py-3 border-b border-border/40 last:border-0 no-underline tracking-[0.01em]"
                 >
                   {link.label}

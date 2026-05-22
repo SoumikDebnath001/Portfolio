@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 
@@ -83,23 +84,33 @@ export default function Mail() {
 
 
         {/* Heading */}
-        <motion.h2
+        <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-10"
-          style={{
-            fontFamily: PLAYFAIR,
-            fontStyle: "italic",
-            fontWeight: 300,
-            fontSize: "clamp(40px, 7vw, 72px)",
-            color: "var(--color-primary)",
-            lineHeight: 0.93,
-            letterSpacing: "-0.02em",
-          }}
+          className="mb-10 flex items-end justify-between"
         >
-          Drop me<br />a line.
-        </motion.h2>
+          <h2
+            style={{
+              fontFamily: PLAYFAIR,
+              fontStyle: "italic",
+              fontWeight: 300,
+              fontSize: "clamp(40px, 7vw, 72px)",
+              color: "var(--color-primary)",
+              lineHeight: 0.93,
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Drop me<br />a line.
+          </h2>
+          <Image
+            src="/Cat_ContactMe.png"
+            alt="Cat Contact Me"
+            width={110}
+            height={110}
+            className="object-contain mb-1 w-20 h-20 md:w-28 md:h-28"
+          />
+        </motion.div>
 
         {/* Card */}
         <motion.div

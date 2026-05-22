@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import type { IconType } from "react-icons";
@@ -193,14 +194,23 @@ export default function Skills() {
           <p className="text-secondary text-2.75 tracking-[0.2em] uppercase font-normal mb-4">
             03 — What I work with
           </p>
-          <h2
-            className="text-primary font-extralight leading-[0.95] tracking-[-0.02em]"
-            style={{ fontSize: "clamp(48px, 6vw, 80px)" }}
-          >
-            Skills &amp;
-            <br />
-            Technologies
-          </h2>
+          <div className="flex items-end gap-6">
+            <h2
+              className="text-primary font-extralight leading-[0.95] tracking-[-0.02em]"
+              style={{ fontSize: "clamp(35px, 8vw, 80px)" }}
+            >
+              Skills &amp;
+              <br />
+              Technologies
+            </h2>
+            <Image
+              src="/Cat_AboutME.png"
+              alt="Cat Skills"
+              width={110}
+              height={110}
+              className="object-contain mb-1 w-14 h-14 md:w-28 md:h-28"
+            />
+          </div>
         </motion.div>
 
         <div className="h-px bg-border mb-12" />

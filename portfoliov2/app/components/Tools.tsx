@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRef, useState } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import {
@@ -197,24 +198,33 @@ export default function Tools() {
           initial={{ opacity: 0, y: 20 }}
           animate={headingInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-14 flex items-end justify-between"
+          className="mb-14 flex flex-col gap-4 md:flex-row md:items-end md:justify-between"
         >
-          <div>
-            <p className="text-secondary text-2.75 tracking-[0.2em] uppercase font-normal mb-4">
-              04 — What I use daily
-            </p>
-            <h2
-              className="text-primary font-extralight leading-[0.95] tracking-[-0.02em]"
-              style={{ fontSize: "clamp(48px, 6vw, 80px)" }}
-            >
-              My
-              <br />
-              Toolkit
-            </h2>
+          <div className="flex items-end gap-4">
+            <div>
+              <p className="text-secondary text-2.75 tracking-[0.2em] uppercase font-normal mb-4">
+                04 — What I use daily
+              </p>
+              <h2
+                className="text-primary font-extralight leading-[0.95] tracking-[-0.02em]"
+                style={{ fontSize: "clamp(48px, 6vw, 80px)" }}
+              >
+                My
+                <br />
+                Toolkit
+              </h2>
+            </div>
+            <Image
+              src="/Cat_ToolsWorker.png"
+              alt="Cat Tools Worker"
+              width={100}
+              height={100}
+              className="object-contain mb-1 w-20 h-20 md:w-28 md:h-28"
+            />
           </div>
           <Link
             href="/tools"
-            className="flex items-center gap-2 text-secondary text-3.25 font-normal tracking-[0.01em] no-underline hover:text-primary transition-colors duration-200 mb-1 group"
+            className="flex items-center gap-2 text-secondary text-3.25 font-normal tracking-[0.01em] no-underline hover:text-primary transition-colors duration-200 md:mb-1 group self-start md:self-auto"
           >
             View all
             <FiArrowRight
