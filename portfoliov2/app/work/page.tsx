@@ -115,6 +115,14 @@ const projects = [
     github: "https://github.com/SoumikDebnath001/BasantiShop",
     tags: ["Next.js", "React", "MongoDB", "NodeJS"],
   },
+  {
+    title: "Cricket Academy: Foundation & Academy Platform",
+    description:
+      "Built a full-stack cricket academy management platform with role-based access (member / coach / admin), subscription lifecycle, and real-time admin notification system. RESTful backend using Node.js, Express, TypeScript, and MongoDB with JWT authentication, Zod validation, and Cloudinary. Admin panel supporting soft-delete and bulk-delete for inquiries, subscription management with plan/start-date controls, user suspension toggle, and a polling notification bell (60s interval). Containerised the full stack with Docker and docker-compose; managed environment parity across development and production.",
+    url: "https://obuyagrassrootsfoundation.org",
+    github: "https://github.com/SoumikDebnath001/Cricket_Academy",
+    tags: ["Next.js", "Express", "Node.js", "MongoDB", "TypeScript", "Docker"],
+  },
 ];
 
 export default function WorkPage() {
