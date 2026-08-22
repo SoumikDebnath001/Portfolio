@@ -8,7 +8,7 @@ import {
   SiCplusplus, SiJavascript, SiPython, SiTypescript,
   SiHtml5, SiCss, SiTailwindcss, SiReact, SiMongodb,
   SiNodedotjs, SiNextdotjs, SiExpress, SiPostgresql,
-  SiMysql, SiDocker, SiGit, SiGithub, SiGithubactions,
+  SiDocker, SiGit, SiGithub, SiGithubactions,
   SiSocketdotio, SiPrisma, SiOpenai,
 } from "react-icons/si";
 
@@ -26,8 +26,7 @@ const iconMap: Record<string, { icon: IconType; color: string }> = {
   "Next.js":        { icon: SiNextdotjs,     color: "#222222" },
   "Express.js":     { icon: SiExpress,       color: "#444444" },
   "PostgreSQL":     { icon: SiPostgresql,    color: "#4169E1" },
-  "PgSQL":          { icon: SiPostgresql,    color: "#4169E1" },
-  "SQL":            { icon: SiMysql,         color: "#4479A1" },
+
   "Docker":         { icon: SiDocker,        color: "#2496ED" },
   "Git":            { icon: SiGit,           color: "#F05032" },
   "GitHub":         { icon: SiGithub,        color: "#333333" },
@@ -67,7 +66,7 @@ const skillCategories: Category[] = [
   {
     title: "Database",
     showIcons: true,
-    skills: ["MongoDB", "PostgreSQL", "SQL", "PgSQL"],
+    skills: ["MongoDB", "PostgreSQL"],
     colSpan: 2,
   },
   {

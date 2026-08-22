@@ -12,7 +12,7 @@ function BrowserWindow({ siteUrl, title }: { siteUrl: string; title: string }) {
 
   useEffect(() => {
     if (!containerRef.current) return;
-    
+
     const updateScale = () => {
       if (containerRef.current) {
         const width = containerRef.current.getBoundingClientRect().width;
@@ -20,7 +20,7 @@ function BrowserWindow({ siteUrl, title }: { siteUrl: string; title: string }) {
         const desktopWidth = 1280;
         const newScale = width / desktopWidth;
         setScale(newScale);
-        
+
         // Target visual height for the container on mobile
         const visualHeight = 240;
         setContainerHeight(visualHeight);
@@ -121,7 +121,15 @@ const projects = [
       "Built a full-stack cricket academy management platform with role-based access (member / coach / admin), subscription lifecycle, and real-time admin notification system. RESTful backend using Node.js, Express, TypeScript, and MongoDB with JWT authentication, Zod validation, and Cloudinary. Admin panel supporting soft-delete and bulk-delete for inquiries, subscription management with plan/start-date controls, user suspension toggle, and a polling notification bell (60s interval). Containerised the full stack with Docker and docker-compose; managed environment parity across development and production.",
     url: "https://obuyagrassrootsfoundation.org",
     github: "https://github.com/SoumikDebnath001/Cricket_Academy",
-    tags: ["Next.js", "Express", "Node.js", "MongoDB", "TypeScript", "Docker"],
+    tags: ["Next.js", "Express", "Node.js", "MongoDB", "TypeScript"],
+  },
+  {
+    title: "Obuya Grassroots Foundation: Courses Platform",
+    description:
+      "An online courses platform for the Obuya Grassroots Foundation, enabling members to browse, enroll in, and access training courses offered by the academy.",
+    url: "https://courses.obuyagrassrootsfoundation.org/",
+    github: "https://github.com/SoumikDebnath001/Cricket_Academy",
+    tags: ["Next.js", "Node.js", "MongoDB", "TypeScript"],
   },
 ];
 
