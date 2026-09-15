@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { FiArrowLeft, FiExternalLink, FiGithub } from "react-icons/fi";
+import { projects } from "../data/projects";
 
 function BrowserWindow({ siteUrl, title }: { siteUrl: string; title: string }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -105,33 +106,6 @@ function BrowserWindow({ siteUrl, title }: { siteUrl: string; title: string }) {
     </>
   );
 }
-
-const projects = [
-  {
-    title: "Basanti Variety Store",
-    description:
-      "A full-stack e-commerce platform for a local variety store, featuring product listings, cart management, and order processing.",
-    url: "https://basantivarietystore.in/",
-    github: "https://github.com/SoumikDebnath001/BasantiShop",
-    tags: ["Next.js", "React", "MongoDB", "NodeJS"],
-  },
-  {
-    title: "Cricket Academy: Foundation & Academy Platform",
-    description:
-      "Built a full-stack cricket academy management platform with role-based access (member / coach / admin), subscription lifecycle, and real-time admin notification system. RESTful backend using Node.js, Express, TypeScript, and MongoDB with JWT authentication, Zod validation, and Cloudinary. Admin panel supporting soft-delete and bulk-delete for inquiries, subscription management with plan/start-date controls, user suspension toggle, and a polling notification bell (60s interval). Containerised the full stack with Docker and docker-compose; managed environment parity across development and production.",
-    url: "https://obuyagrassrootsfoundation.org",
-    github: "https://github.com/SoumikDebnath001/Cricket_Academy",
-    tags: ["Next.js", "Express", "Node.js", "MongoDB", "TypeScript"],
-  },
-  {
-    title: "Obuya Grassroots Foundation: Courses Platform",
-    description:
-      "An online courses platform for the Obuya Grassroots Foundation, enabling members to browse, enroll in, and access training courses offered by the academy.",
-    url: "https://courses.obuyagrassrootsfoundation.org/",
-    github: "https://github.com/SoumikDebnath001/Cricket_Academy",
-    tags: ["Next.js", "Node.js", "MongoDB", "TypeScript"],
-  },
-];
 
 export default function WorkPage() {
   return (

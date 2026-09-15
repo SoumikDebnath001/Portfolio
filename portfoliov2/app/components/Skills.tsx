@@ -1,225 +1,110 @@
-"use client";
-
-import Image from "next/image";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { Fragment } from "react";
 import type { IconType } from "react-icons";
 import {
   SiCplusplus, SiJavascript, SiPython, SiTypescript,
   SiHtml5, SiCss, SiTailwindcss, SiReact, SiMongodb,
   SiNodedotjs, SiNextdotjs, SiExpress, SiPostgresql,
-  SiDocker, SiGit, SiGithub, SiGithubactions,
+  SiDocker, SiGit, SiGithubactions,
   SiSocketdotio, SiPrisma, SiOpenai,
 } from "react-icons/si";
+import SectionHeading from "./SectionHeading";
+import Reveal from "./Reveal";
 
-const iconMap: Record<string, { icon: IconType; color: string }> = {
-  "C++":            { icon: SiCplusplus,     color: "#00599C" },
-  "JavaScript":     { icon: SiJavascript,    color: "#F7DF1E" },
-  "Python":         { icon: SiPython,        color: "#3776AB" },
-  "TypeScript":     { icon: SiTypescript,    color: "#3178C6" },
-  "HTML":           { icon: SiHtml5,         color: "#E34F26" },
-  "CSS":            { icon: SiCss,           color: "#1572B6" },
-  "Tailwind CSS":   { icon: SiTailwindcss,   color: "#06B6D4" },
-  "React.js":       { icon: SiReact,         color: "#61DAFB" },
-  "MongoDB":        { icon: SiMongodb,       color: "#47A248" },
-  "NodeJS":         { icon: SiNodedotjs,     color: "#339933" },
-  "Next.js":        { icon: SiNextdotjs,     color: "#222222" },
-  "Express.js":     { icon: SiExpress,       color: "#444444" },
-  "PostgreSQL":     { icon: SiPostgresql,    color: "#4169E1" },
+type Skill = { name: string; icon: IconType; color: string };
 
-  "Docker":         { icon: SiDocker,        color: "#2496ED" },
-  "Git":            { icon: SiGit,           color: "#F05032" },
-  "GitHub":         { icon: SiGithub,        color: "#333333" },
-  "CI/CD":          { icon: SiGithubactions, color: "#2088FF" },
-  "WebSocket":      { icon: SiSocketdotio,   color: "#010101" },
-  "ORM":            { icon: SiPrisma,        color: "#5A67D8" },
-  "GenAI":          { icon: SiOpenai,        color: "#412991" },
-};
-
-type Category = {
-  title: string;
-  showIcons: boolean;
-  skills: string[];
-  colSpan: 1 | 2 | 4;
-  rowSpan?: 2;
-};
-
-const skillCategories: Category[] = [
+const skillGroups: { title: string; skills: Skill[] }[] = [
   {
     title: "Languages",
-    showIcons: true,
-    skills: ["C++", "JavaScript", "Python", "TypeScript"],
-    colSpan: 2,
+    skills: [
+      { name: "TypeScript", icon: SiTypescript, color: "#3178C6" },
+      { name: "JavaScript", icon: SiJavascript, color: "#E3C500" },
+      { name: "Python",     icon: SiPython,     color: "#3776AB" },
+      { name: "C++",        icon: SiCplusplus,  color: "#00599C" },
+    ],
   },
   {
-    title: "Concepts",
-    showIcons: false,
-    skills: ["OOPS", "DSA", "DBMS", "OS", "System Design"],
-    colSpan: 2,
+    title: "Frontend",
+    skills: [
+      { name: "React",        icon: SiReact,       color: "#149ECA" },
+      { name: "Next.js",      icon: SiNextdotjs,   color: "#222222" },
+      { name: "Tailwind CSS", icon: SiTailwindcss, color: "#06B6D4" },
+      { name: "HTML",         icon: SiHtml5,       color: "#E34F26" },
+      { name: "CSS",          icon: SiCss,         color: "#1572B6" },
+    ],
   },
   {
-    title: "Development",
-    showIcons: true,
-    skills: ["HTML", "CSS", "Tailwind CSS", "React.js", "NodeJS", "Next.js", "Express.js"],
-    colSpan: 4,
+    title: "Backend & Data",
+    skills: [
+      { name: "Node.js",    icon: SiNodedotjs,   color: "#339933" },
+      { name: "Express",    icon: SiExpress,     color: "#444444" },
+      { name: "MongoDB",    icon: SiMongodb,     color: "#47A248" },
+      { name: "PostgreSQL", icon: SiPostgresql,  color: "#4169E1" },
+      { name: "ORM",        icon: SiPrisma,      color: "#5A67D8" },
+      { name: "WebSocket",  icon: SiSocketdotio, color: "#222222" },
+    ],
   },
   {
-    title: "Database",
-    showIcons: true,
-    skills: ["MongoDB", "PostgreSQL"],
-    colSpan: 2,
-  },
-  {
-    title: "Soft Skills",
-    showIcons: false,
-    skills: ["Critical Thinking", "Teamwork", "Time Management", "Adaptability"],
-    colSpan: 1,
-  },
-  {
-    title: "Additional",
-    showIcons: true,
-    skills: ["GenAI", "Docker", "Git", "GitHub", "CI/CD", "WebSocket", "ORM"],
-    colSpan: 1,
+    title: "DevOps & AI",
+    skills: [
+      { name: "Docker",       icon: SiDocker,        color: "#2496ED" },
+      { name: "Git & GitHub", icon: SiGit,           color: "#F05032" },
+      { name: "CI/CD",        icon: SiGithubactions, color: "#2088FF" },
+      { name: "GenAI",        icon: SiOpenai,        color: "#412991" },
+    ],
   },
 ];
 
-function IconSkill({ skill, size = "md" }: { skill: string; size?: "sm" | "md" | "lg" }) {
-  const entry = iconMap[skill];
-  if (!entry) return null;
-  const Icon = entry.icon;
-
-  const iconSize = size === "lg" ? 22 : size === "sm" ? 16 : 18;
-  const boxSize  = size === "lg" ? "w-11 h-11 md:w-16 md:h-16" : size === "sm" ? "w-8 h-8 md:w-10 md:h-10" : "w-9 h-9 md:w-12 md:h-12";
-  const textSize = "text-2.25 md:text-2.5";
-
-  return (
-    <motion.div
-      whileHover={{ y: -4, scale: 1.06 }}
-      transition={{ duration: 0.18, ease: "easeOut" }}
-      className="flex flex-col items-center gap-0 md:gap-2 cursor-default"
-    >
-      <div
-        className={`${boxSize} rounded-2xl bg-[#F5F5F5] border border-[#EBEBEB] flex items-center justify-center`}
-      >
-        <Icon size={iconSize} style={{ color: entry.color }} />
-      </div>
-      <span className={`hidden md:block ${textSize} text-secondary tracking-[0.03em] font-normal text-center leading-tight`}>
-        {skill}
-      </span>
-    </motion.div>
-  );
-}
-
-const colSpanClass: Record<number, string> = {
-  1: "col-span-1",
-  2: "col-span-2",
-  4: "col-span-2 md:col-span-4",
-};
-
-function SkillCard({ category, index }: { category: Category; index: number }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
-
-  const isFullWidth = category.colSpan === 4;
-
-  return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 18 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: index * 0.06 }}
-      className={[
-        colSpanClass[category.colSpan],
-        category.rowSpan === 2 ? "row-span-2" : "",
-        "bg-white rounded-2xl border border-[#EBEBEB] p-3 md:p-6 flex flex-col gap-3 md:gap-4",
-        "hover:border-[#D4D4D4] transition-colors duration-300",
-      ].join(" ")}
-      style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}
-    >
-      <p className="text-2.5 text-secondary tracking-[0.22em] uppercase font-medium">
-        {category.title}
-      </p>
-      <div className="h-px bg-[#F0F0F0]" />
-
-      {category.showIcons ? (
-        <div className={`flex flex-wrap ${isFullWidth ? "gap-3 md:gap-8" : "gap-2.5 md:gap-5"} flex-1`}>
-          {category.skills.map((skill) => (
-            <IconSkill
-              key={skill}
-              skill={skill}
-              size={isFullWidth ? "lg" : "md"}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="flex flex-col gap-3 flex-1">
-          {category.skills.map((skill) => (
-            <div key={skill} className="flex items-center gap-2.5">
-              <div className="w-1 h-1 rounded-full bg-[#D0D0D0] shrink-0" />
-              <span className="text-3.25 text-primary font-normal tracking-[0.01em]">
-                {skill}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-    </motion.div>
-  );
-}
+const fundamentals = ["Data Structures & Algorithms", "System Design", "OOP", "DBMS", "Operating Systems"];
 
 export default function Skills() {
-  const headingRef = useRef<HTMLDivElement>(null);
-  const headingInView = useInView(headingRef, { once: true, margin: "-60px" });
-
   return (
-    <section id="skills" className="relative bg-base py-24">
+    <section id="skills" className="bg-base py-14 md:py-24">
+      <div className="max-w-350 mx-auto px-5 md:px-12 lg:px-20">
+        <SectionHeading
+          index="03"
+          label="Skills"
+          title={<>Skills &amp; <em className="font-playfair italic font-normal">stack</em></>}
+          image="/Cat_AboutME.png"
+        />
 
-      {/* Left vertical label (desktop only) */}
-      <div className="hidden md:flex absolute left-0 top-0 h-full w-7.5 items-center justify-center">
-        <span className="block -rotate-90 whitespace-nowrap text-secondary text-2.75 tracking-[0.18em] uppercase font-normal">
-          Skills
-        </span>
-      </div>
-
-      <div className="max-w-350 mx-auto px-5 md:px-20">
-
-        <motion.div
-          ref={headingRef}
-          initial={{ opacity: 0, y: 20 }}
-          animate={headingInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16"
-        >
-          <p className="text-secondary text-2.75 tracking-[0.2em] uppercase font-normal mb-4">
-            03 — What I work with
-          </p>
-          <div className="flex items-end gap-6">
-            <h2
-              className="text-primary font-extralight leading-[0.95] tracking-[-0.02em]"
-              style={{ fontSize: "clamp(35px, 8vw, 80px)" }}
+        <div className="border-b border-border">
+          {skillGroups.map((group, index) => (
+            <Reveal
+              key={group.title}
+              delay={index * 0.05}
+              className="grid gap-4 border-t border-border py-6 md:grid-cols-[220px_1fr] md:gap-8 md:py-8"
             >
-              Skills &amp;
-              <br />
-              Technologies
-            </h2>
-            <Image
-              src="/Cat_AboutME.png"
-              alt="Cat Skills"
-              width={110}
-              height={110}
-              className="object-contain mb-1 w-14 h-14 md:w-28 md:h-28"
-            />
-          </div>
-        </motion.div>
-
-        <div className="h-px bg-border mb-12" />
-
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 auto-rows-auto">
-          {skillCategories.map((category, index) => (
-            <SkillCard key={category.title} category={category} index={index} />
+              <h3 className="text-[11px] tracking-[0.18em] uppercase text-secondary md:pt-2.5">{group.title}</h3>
+              <ul className="flex flex-wrap gap-2 md:gap-2.5">
+                {group.skills.map(({ name, icon: Icon, color }) => (
+                  <li
+                    key={name}
+                    className="inline-flex h-10 items-center gap-2.5 rounded-full border border-[#E6E6E6] bg-white pl-1.5 pr-4 text-[14px] text-primary transition-colors duration-200 hover:border-[#C8C8C8]"
+                  >
+                    <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F4F4F4]">
+                      <Icon size={14} style={{ color }} aria-hidden />
+                    </span>
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            </Reveal>
           ))}
-        </div>
 
+          <Reveal className="grid gap-4 border-t border-border py-6 md:grid-cols-[220px_1fr] md:gap-8 md:py-8">
+            <h3 className="text-[11px] tracking-[0.18em] uppercase text-secondary md:pt-0.5">Fundamentals</h3>
+            <p className="text-[15px] leading-relaxed text-primary">
+              {fundamentals.map((item, i) => (
+                <Fragment key={item}>
+                  <span className="whitespace-nowrap">
+                    {item}
+                    {i < fundamentals.length - 1 && <span aria-hidden className="ml-2.5 mr-1.5 text-[#C4C4C4]">/</span>}
+                  </span>{" "}
+                </Fragment>
+              ))}
+            </p>
+          </Reveal>
+        </div>
       </div>
     </section>
   );

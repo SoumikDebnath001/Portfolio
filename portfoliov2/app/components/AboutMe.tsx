@@ -1,64 +1,55 @@
-import Image from "next/image";
+import SectionHeading from "./SectionHeading";
+import Reveal from "./Reveal";
+import { projects } from "../data/projects";
+
+const facts = [
+  { label: "Focus", value: "Full stack & GenAI" },
+  { label: "Live projects", value: String(projects.length).padStart(2, "0") },
+  { label: "Based in", value: "India" },
+];
 
 export default function AboutMe() {
   return (
-    <section id="about" className="relative bg-base min-h-screen flex items-center py-20 md:py-24">
+    <section id="about" className="bg-base py-14 md:py-24">
+      <div className="max-w-350 mx-auto px-5 md:px-12 lg:px-20">
+        <SectionHeading
+          index="01"
+          label="About"
+          title={<>Who am <em className="font-playfair italic font-normal">I?</em></>}
+          image="/WhoAmI.png"
+        />
 
-      {/* Left vertical label (desktop only) */}
-      <div className="hidden md:flex absolute left-0 top-0 h-full w-7.5 items-center justify-center">
-        <span className="block -rotate-90 whitespace-nowrap text-secondary text-2.75 tracking-[0.18em] uppercase font-normal">
-          About Me
-        </span>
-      </div>
+        <div className="grid gap-10 md:grid-cols-12 md:gap-12">
+          <Reveal className="md:col-span-8 lg:col-span-7">
+            <p
+              className="text-primary font-light leading-[1.35] tracking-[-0.015em]"
+              style={{ fontSize: "clamp(22px, 2.6vw, 32px)" }}
+            >
+              I build web products end to end — clean, responsive interfaces
+              backed by fast, reliable APIs.
+            </p>
+            <p className="mt-6 max-w-[56ch] text-secondary text-[15px] md:text-[16px] leading-[1.75]">
+              I care about the details people notice and the architecture they
+              don&apos;t. These days I&apos;m focused on bringing generative AI
+              into real products, while sharpening my fundamentals through DSA
+              and system design.
+            </p>
+          </Reveal>
 
-      <div className="max-w-350 mx-auto w-full px-5 md:px-20 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20">
-
-        {/* Left — text */}
-        <div>
-          <p className="text-secondary text-2.75 tracking-[0.2em] uppercase font-normal mb-4">
-            01 — About Me
-          </p>
-          <h2
-            className="text-primary font-extralight leading-[0.95] tracking-[-0.02em] mb-9"
-            style={{ fontSize: "clamp(36px, 5vw, 64px)" }}
-          >
-            Who
-            <br />
-            Am I?
-          </h2>
-
-          <div className="h-px bg-border mb-9" />
-
-          <p className="text-primary text-3.75 font-normal leading-[1.8] tracking-[0.01em] mb-5">
-            Hi, I&apos;m{" "}
-            <strong className="font-semibold">Soumik Debnath</strong> — a
-            passionate Full Stack Engineer who loves building things that live
-            on the internet.
-          </p>
-          <p className="text-secondary text-3.75 font-normal leading-[1.8] tracking-[0.01em] mb-5">
-            I work across the full stack — from crafting clean, responsive UIs
-            with React and Next.js to building robust backends with Node.js,
-            Express, and MongoDB. I&apos;m deeply interested in AI integration
-            and modern developer tooling.
-          </p>
-          <p className="text-secondary text-3.75 font-normal leading-[1.8] tracking-[0.01em]">
-            When I&apos;m not coding, I enjoy exploring new technologies,
-            contributing to open source, and continuously sharpening my
-            problem-solving skills through DSA and system design.
-          </p>
+          <Reveal delay={0.1} className="md:col-span-4 lg:col-start-9">
+            <dl className="grid grid-cols-3 border-y border-border md:grid-cols-1 md:border-b-0">
+              {facts.map((fact) => (
+                <div
+                  key={fact.label}
+                  className="flex flex-col gap-1 py-4 md:flex-row md:items-baseline md:justify-between md:py-5 md:border-b md:border-border"
+                >
+                  <dt className="text-[11px] tracking-[0.14em] uppercase text-secondary">{fact.label}</dt>
+                  <dd className="text-[15px] md:text-[16px] text-primary">{fact.value}</dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
         </div>
-
-        {/* Right — image */}
-        <div className="flex items-center justify-center">
-          <Image
-            src="/WhoAmI.png"
-            alt="Who Am I"
-            width={420}
-            height={420}
-            className="object-contain max-w-full w-56 md:w-full"
-          />
-        </div>
-
       </div>
     </section>
   );
