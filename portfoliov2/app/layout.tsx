@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import Script from "next/script";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import SiteLoader from "./components/SiteLoader";
 import "./globals.css";
 
 const inter = Inter({
@@ -46,12 +47,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${playfair.variable} site-loading`} suppressHydrationWarning>
       <body>
         {/* Applies the saved theme before first paint so the page never flashes. */}
         <Script id="theme-boot" strategy="beforeInteractive">
           {`(function(){try{var s=localStorage.getItem("theme");var d=window.matchMedia("(prefers-color-scheme: dark)").matches;document.documentElement.setAttribute("data-theme",s||(d?"dark":"light"));}catch(e){}})();`}
         </Script>
+        {/* Without JS nothing would ever lift the loader, so skip it. */}
+        <noscript>
+          <style>{`#site-loader{display:none}html.site-loading,html.site-loading body{overflow:auto}`}</style>
+        </noscript>
+        <SiteLoader />
         {children}
         <SpeedInsights />
       </body>

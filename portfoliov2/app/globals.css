@@ -116,3 +116,26 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── Page loader ─────────────────────────────────────────── */
+#site-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  background: var(--color-base);
+  transition: opacity 500ms ease, visibility 500ms ease;
+}
+#site-loader[data-leaving] {
+  opacity: 0;
+  visibility: hidden;
+}
+#site-loader img {
+  width: min(160px, 40vw);
+  height: auto;
+}
+html.site-loading,
+html.site-loading body {
+  overflow: hidden;
+}

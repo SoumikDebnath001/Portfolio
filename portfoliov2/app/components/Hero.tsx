@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { FiArrowUpRight } from "react-icons/fi";
 import { motion, useReducedMotion } from "framer-motion";
+import { useSiteReady } from "../lib/siteReady";
 
 const ROLES = [
   { text: "Full Stack Engineer",   accent: "var(--color-accent-work)"    },
@@ -69,10 +70,11 @@ const fadeUp = {
 export default function Hero() {
   const { text: role, accent: roleAccent } = useTypedRole(ROLES);
   const reduceMotion = useReducedMotion();
+  const siteReady = useSiteReady();
   const anim = (i: number) =>
     reduceMotion
       ? {}
-      : { variants: fadeUp, initial: "hidden" as const, animate: "show" as const, custom: i };
+      : { variants: fadeUp, initial: "hidden" as const, animate: siteReady ? ("show" as const) : ("hidden" as const), custom: i };
 
   return (
     <section
