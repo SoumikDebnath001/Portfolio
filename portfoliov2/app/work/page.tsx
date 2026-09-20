@@ -44,10 +44,10 @@ function BrowserWindow({ siteUrl, title }: { siteUrl: string; title: string }) {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        className="hidden md:flex flex-col rounded-2xl overflow-hidden bg-white w-full"
+        className="hidden md:flex flex-col rounded-2xl overflow-hidden bg-surface w-full"
         style={{ boxShadow: "0 30px 60px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)" }}
       >
-        <div className="flex items-center gap-4 px-4.5 py-3 bg-[#F4F4F4] border-b border-[#E5E5E5] select-none">
+        <div className="flex items-center gap-4 px-4.5 py-3 bg-elevated border-b border-[#E5E5E5] select-none">
           <div className="flex gap-2 shrink-0">
             <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
             <div className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
@@ -57,16 +57,16 @@ function BrowserWindow({ siteUrl, title }: { siteUrl: string; title: string }) {
             href={siteUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-1 items-center justify-center gap-1.5 bg-white rounded-lg px-4 py-1.5 text-2.75 text-[#888] border border-border overflow-hidden whitespace-nowrap text-ellipsis font-mono tracking-[0.03em] no-underline hover:bg-[#F9F9F9] transition-colors"
+            className="flex flex-1 items-center justify-center gap-1.5 bg-surface rounded-lg px-4 py-1.5 text-2.75 text-[#888] border border-border overflow-hidden whitespace-nowrap text-ellipsis font-mono tracking-[0.03em] no-underline hover:bg-[#F9F9F9] transition-colors"
           >
             <span className="text-[#27C93F] text-xs">●</span>
             {siteUrl.replace("https://", "")}
           </a>
         </div>
-        <div className="relative w-full h-145 overflow-hidden bg-[#FAFAFA]">
+        <div className="relative w-full h-145 overflow-hidden bg-elevated">
           <iframe
             src={siteUrl}
-            className="w-full h-full border-none block bg-white"
+            className="w-full h-full border-none block bg-surface"
             title={`${title} Desktop Preview`}
             scrolling="no"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
@@ -80,7 +80,7 @@ function BrowserWindow({ siteUrl, title }: { siteUrl: string; title: string }) {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-        className="md:hidden w-full rounded-2xl overflow-hidden bg-white border border-[#E8E8E8] relative"
+        className="md:hidden w-full rounded-2xl overflow-hidden bg-surface border border-border relative"
         style={{
           height: `${containerHeight}px`,
           boxShadow: "0 8px 24px rgba(0,0,0,0.04)"
@@ -96,7 +96,7 @@ function BrowserWindow({ siteUrl, title }: { siteUrl: string; title: string }) {
         >
           <iframe
             src={siteUrl}
-            className="w-full h-full border-none block bg-white pointer-events-none"
+            className="w-full h-full border-none block bg-surface pointer-events-none"
             title={`${title} Mobile Desktop Preview`}
             scrolling="no"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
@@ -205,7 +205,7 @@ export default function WorkPage() {
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-5 py-2.5 md:px-6 md:py-3 bg-transparent text-primary text-3.25 font-normal rounded-full no-underline tracking-[0.01em] border border-[#D0D0D0] hover:scale-105 hover:border-primary transition-all duration-200"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 md:px-6 md:py-3 bg-transparent text-primary text-3.25 font-normal rounded-full no-underline tracking-[0.01em] border border-border hover:scale-105 hover:border-primary transition-all duration-200"
                   >
                     GitHub <FiGithub size={14} />
                   </a>
@@ -231,7 +231,7 @@ export default function WorkPage() {
                   {project.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-4 py-1.5 border border-[#D8D8D8] rounded-full text-2.75 text-[#666] tracking-wider bg-white font-medium"
+                      className="px-4 py-1.5 border border-[#D8D8D8] rounded-full text-2.75 text-[#666] tracking-wider bg-surface font-medium"
                     >
                       {tag}
                     </span>

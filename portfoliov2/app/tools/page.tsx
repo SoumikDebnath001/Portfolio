@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FiArrowLeft, FiTerminal, FiImage, FiDatabase, FiZap } from "react-icons/fi";
+import { FiArrowLeft, FiZap } from "react-icons/fi";
 import {
-  SiAnthropic, SiPerplexity, SiOpenai, SiPostman, SiMongodb, SiVscodium,
+  SiAnthropic, SiGooglegemini, SiOpenai, SiPostman, SiMongodb, SiVscodium,
 } from "react-icons/si";
 import type { IconType } from "react-icons";
 
@@ -27,12 +27,12 @@ const aiTools: Tool[] = [
     icon: SiAnthropic,
   },
   {
-    name: "Perplexity",
-    by: "Perplexity AI",
+    name: "Gemini",
+    by: "Google",
     category: "Research",
-    description: "AI search with real-time cited sources for exploring docs and comparing libraries.",
-    color: "#1FB8CD",
-    icon: SiPerplexity,
+    description: "Multimodal reasoning and research with fast answers across docs, images, and long files.",
+    color: "#4285F4",
+    icon: SiGooglegemini,
   },
   {
     name: "ChatGPT",
@@ -42,25 +42,17 @@ const aiTools: Tool[] = [
     color: "#10A37F",
     icon: SiOpenai,
   },
-  {
-    name: "Cursor",
-    by: "Anysphere",
-    category: "AI Code Editor",
-    description: "VS Code-based IDE with codebase-aware AI for multi-file edits and inline chat.",
-    color: "#6C63FF",
-    icon: FiTerminal,
-  },
-  {
-    name: "NanoBanana",
-    by: "NanoBanana",
-    category: "Image Generation",
-    description: "Generates visual assets, mockups, and graphics for UI prototyping and projects.",
-    color: "#F59E0B",
-    icon: FiImage,
-  },
 ];
 
 const devTools: Tool[] = [
+  {
+    name: "Antigravity",
+    by: "Google",
+    category: "AI IDE",
+    description: "Agent-first IDE for planning and running multi-file changes across a whole codebase.",
+    color: "#8B5CF6",
+    icon: FiZap,
+  },
   {
     name: "VS Code",
     by: "Microsoft",
@@ -78,28 +70,12 @@ const devTools: Tool[] = [
     icon: SiPostman,
   },
   {
-    name: "Admin$",
-    by: "AdminJS",
-    category: "Admin Panel",
-    description: "Auto-generates admin dashboards for managing app data and users without custom UI.",
-    color: "#3B82F6",
-    icon: FiDatabase,
-  },
-  {
     name: "MongoDB Compass",
     by: "MongoDB",
     category: "Database GUI",
     description: "Visual interface for browsing collections, testing queries, and inspecting schemas.",
     color: "#47A248",
     icon: SiMongodb,
-  },
-  {
-    name: "Antigravity",
-    by: "Antigravity",
-    category: "Productivity",
-    description: "Streamlines developer workflows and automates repetitive tasks during long sessions.",
-    color: "#8B5CF6",
-    icon: FiZap,
   },
 ];
 
@@ -110,8 +86,8 @@ function ToolCard({ tool, index }: { tool: Tool; index: number }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1], delay: 0.1 + index * 0.06 }}
-      className="bg-white rounded-2xl border border-[#EBEBEB] p-5 flex flex-col gap-3.5 hover:border-[#D4D4D4] transition-colors duration-300"
-      style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.04)" }}
+      className="bg-surface rounded-2xl border border-border p-5 flex flex-col gap-3.5 hover:border-secondary transition-colors duration-300"
+      style={{ boxShadow: "0 1px 4px rgba(0,0,0,0.06)" }}
     >
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-2">
@@ -135,7 +111,7 @@ function ToolCard({ tool, index }: { tool: Tool; index: number }) {
         </span>
       </div>
 
-      <div className="h-px bg-[#F4F4F4]" />
+      <div className="h-px bg-elevated" />
 
       <p className="text-secondary text-3 font-normal leading-[1.6] tracking-[0.01em]">
         {tool.description}
@@ -208,7 +184,7 @@ export default function ToolsPage() {
             <p className="text-secondary text-2.75 tracking-[0.22em] uppercase font-medium shrink-0">
               AI Tools
             </p>
-            <div className="flex-1 h-px bg-[#EBEBEB]" />
+            <div className="flex-1 h-px bg-hairline" />
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
             {aiTools.map((tool, index) => (
@@ -228,7 +204,7 @@ export default function ToolsPage() {
             <p className="text-secondary text-2.75 tracking-[0.22em] uppercase font-medium shrink-0">
               Dev Tools
             </p>
-            <div className="flex-1 h-px bg-[#EBEBEB]" />
+            <div className="flex-1 h-px bg-hairline" />
           </motion.div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
             {devTools.map((tool, index) => (

@@ -10,9 +10,9 @@ type Status = "idle" | "sending" | "success" | "error" | "limited";
 const EMAIL = "debnathsoumik17@gmail.com";
 
 const inputCls = [
-  "w-full rounded-xl border border-[#E2E2E2] bg-[#FAFAFA] px-4 text-[16px] text-primary",
-  "placeholder:text-[#B5B5B5] outline-none transition-[border-color,box-shadow,background-color] duration-200",
-  "focus:border-primary focus:bg-white focus:ring-4 focus:ring-black/5",
+  "w-full rounded-xl border border-border bg-elevated px-4 text-[16px] text-primary",
+  "placeholder:text-muted outline-none transition-[border-color,box-shadow,background-color] duration-200",
+  "focus:border-primary focus:bg-surface focus:ring-4 focus:ring-primary/10",
 ].join(" ");
 
 const labelCls = "mb-2 block text-[13px] font-medium text-primary";
@@ -47,11 +47,13 @@ export default function Mail() {
   const isBlocked = status === "sending" || status === "success" || status === "limited";
 
   return (
-    <section id="mail" className="bg-base pt-14 md:pt-24 pb-4">
+    <section id="mail" aria-labelledby="mail-title" className="bg-base py-section md:py-section-lg">
       <div className="max-w-350 mx-auto px-5 md:px-12 lg:px-20">
         <SectionHeading
+          accent="var(--color-accent-contact)"
           index="05"
           label="Contact"
+          titleId="mail-title"
           title={<>Let&apos;s <em className="font-playfair italic font-normal">talk</em></>}
           image="/Cat_ContactMe.png"
         />
@@ -66,7 +68,7 @@ export default function Mail() {
               href={`mailto:${EMAIL}`}
               className="group mt-6 inline-flex max-w-full items-center gap-3 text-[15px] text-primary no-underline"
             >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-[#D0D0D0] transition-colors duration-200 group-hover:border-primary group-hover:bg-primary group-hover:text-white">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border transition-colors duration-200 group-hover:border-primary group-hover:bg-primary group-hover:text-on-primary">
                 <FiMail size={16} aria-hidden />
               </span>
               <span className="truncate border-b border-transparent transition-colors duration-200 group-hover:border-primary">
@@ -78,7 +80,7 @@ export default function Mail() {
           <Reveal delay={0.1} className="lg:col-span-8">
             <form
               onSubmit={handleSubmit}
-              className="rounded-3xl border border-[#E8E8E8] bg-white p-5 sm:p-7 md:p-9"
+              className="rounded-3xl border border-border bg-surface p-5 sm:p-7 md:p-9"
               style={{ boxShadow: "0 1px 2px rgba(0,0,0,0.03), 0 12px 40px rgba(0,0,0,0.04)" }}
             >
               <div className="grid gap-5 sm:grid-cols-2">
@@ -127,11 +129,11 @@ export default function Mail() {
                 <button
                   type="submit"
                   disabled={isBlocked}
-                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-7 text-[15px] font-medium text-white transition-colors duration-200 hover:bg-[#3a3a3a] disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
+                  className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-primary px-7 text-[15px] font-medium text-on-primary transition-colors duration-200 hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto"
                 >
                   {status === "sending" ? (
                     <>
-                      <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                      <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-current/30 border-t-current" />
                       Sending…
                     </>
                   ) : status === "success" ? (

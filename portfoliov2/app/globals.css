@@ -1,17 +1,85 @@
 @import "tailwindcss";
 
+/* Manual theme switching: `dark:` follows [data-theme="dark"] on <html>. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
+  /* Light theme — the default */
   --color-primary: #222222;
-  --color-secondary: #7B7B7B;
+  --color-secondary: #6E6E6E;
+  --color-muted: #94949B;
   --color-base: #F8F8F8;
+  --color-surface: #FFFFFF;
+  --color-elevated: #FAFAFA;
   --color-border: #E0E0E0;
+  --color-hairline: #EAEAEA;
+  --color-on-primary: #FFFFFF;
+
+  /* One accent per section, so each view has its own temperature */
+  --color-accent-about: #B45309;
+  --color-accent-work: #1D4ED8;
+  --color-accent-skills: #6D28D9;
+  --color-accent-tools: #0F766E;
+  --color-accent-contact: #BE123C;
+
   --font-sans: var(--font-inter);
   --font-playfair: var(--font-playfair);
+
+  /* Vertical rhythm — one scale for every section on the page */
+  --spacing-section: 4.5rem;
+  --spacing-section-lg: 8rem;
 }
 
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-primary: #F1F1F2;
+  --color-secondary: #A0A0A8;
+  --color-muted: #75757E;
+  --color-base: #0D0D0F;
+  --color-surface: #161619;
+  --color-elevated: #1C1C20;
+  --color-border: #2B2B32;
+  --color-hairline: #232329;
+  --color-on-primary: #121214;
+
+  --color-accent-about: #FBBF24;
+  --color-accent-work: #7DA7FB;
+  --color-accent-skills: #B49BFB;
+  --color-accent-tools: #34D3B5;
+  --color-accent-contact: #FB7185;
+}
 
 html {
-  scroll-behavior: smooth;
+  /* Sticky nav clearance for in-page anchors. Smooth easing is handled by
+     the Lenis layer in SmoothScroll.tsx, which falls back to native jumps
+     when the visitor prefers reduced motion. */
+  scroll-padding-top: 5.5rem;
+}
+
+/* Native smooth-scroll is the fallback; once Lenis takes over (it puts
+   .lenis on <html>) it must be off or the two ease against each other. */
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.lenis) {
+    scroll-behavior: smooth;
+  }
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+html.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+html.lenis.lenis-stopped {
+  overflow: clip;
 }
 
 body {
@@ -21,4 +89,30 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+  background-color: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  color: var(--color-primary);
+}
+
+/* One consistent keyboard ring instead of four different browser defaults */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

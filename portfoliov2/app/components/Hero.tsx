@@ -3,284 +3,235 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { FiMenu, FiX } from "react-icons/fi";
-import { motion, AnimatePresence } from "framer-motion";
+import { FiArrowUpRight } from "react-icons/fi";
+import { motion, useReducedMotion } from "framer-motion";
 
-const navLinks = [
-  { label: "About Me", href: "#about" },
-  { label: "Work", href: "/work" },
-  { label: "Skills", href: "#skills" },
-  { label: "Tools", href: "#tools" },
-  { label: "Contact", href: "#mail" },
+const ROLES = [
+  { text: "Full Stack Engineer",   accent: "var(--color-accent-work)"    },
+  { text: "MERN Stack Developer",  accent: "var(--color-accent-tools)"   },
+  { text: "GenAI Developer",       accent: "var(--color-accent-skills)"  },
+  { text: "Designer",              accent: "var(--color-accent-contact)" },
 ];
 
-export default function Hero() {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const handleMobileNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith("#")) {
-      e.preventDefault();
-      setMenuOpen(false);
-      setTimeout(() => {
-        const el = document.querySelector(href);
-        if (el) el.scrollIntoView({ behavior: "smooth" });
-      }, 320);
-    } else {
-      setMenuOpen(false);
-    }
-  };
-  const [displayedText, setDisplayedText] = useState("");
-  const [textIndex, setTextIndex] = useState(0);
-
-  const texts = [
-    "Full Stack Engineer",
-    "Designer",
-    "MERN Stack Developer",
-    "GenAi Developer"
-  ];
-
-  const fullText = texts[textIndex];
+/** Types a role out, holds, deletes, moves to the next one. */
+function useTypedRole(roles: typeof ROLES) {
+  const [index, setIndex] = useState(0);
+  const [text, setText] = useState("");
+  const reduceMotion = useReducedMotion();
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
-    let charIndex = 0;
-    let isDeletePhase = false;
-    let isPausedLocal = false;
+    if (reduceMotion) return;
 
-    const interval = setInterval(() => {
-      if (!isDeletePhase && !isPausedLocal) {
-        // Typing phase
-        if (charIndex <= fullText.length) {
-          setDisplayedText(fullText.slice(0, charIndex));
-          charIndex++;
+    const full = roles[index].text;
+    let char = 0;
+    let deleting = false;
+    let holdUntil = 0;
+
+    const id = setInterval(() => {
+      if (Date.now() < holdUntil) return;
+
+      if (!deleting) {
+        if (char <= full.length) {
+          setText(full.slice(0, char));
+          char += 1;
         } else {
-          // Finished typing, pause before deleting
-          isPausedLocal = true;
-          timeoutId = setTimeout(() => {
-            isPausedLocal = false;
-            isDeletePhase = true;
-            charIndex = fullText.length;
-          }, 3000);
+          deleting = true;
+          char = full.length;
+          holdUntil = Date.now() + 2200;
         }
-      } else if (isDeletePhase && !isPausedLocal) {
-        // Deleting phase
-        if (charIndex > 0) {
-          charIndex--;
-          setDisplayedText(fullText.slice(0, charIndex));
-        } else {
-          // Finished deleting, move to next text
-          isDeletePhase = false;
-          charIndex = 0;
-          setTextIndex((prev) => (prev + 1) % texts.length);
-        }
+      } else if (char > 0) {
+        char -= 1;
+        setText(full.slice(0, char));
+      } else {
+        setIndex((i) => (i + 1) % roles.length);
       }
-    }, 50);
+    }, 55);
 
-    return () => {
-      clearInterval(interval);
-      if (timeoutId) clearTimeout(timeoutId);
-    };
-  }, [fullText, texts.length]);
+    return () => clearInterval(id);
+  }, [index, roles, reduceMotion]);
+
+  // With reduced motion the role is shown outright rather than typed.
+  return {
+    text: reduceMotion ? roles[0].text : text,
+    accent: reduceMotion ? roles[0].accent : roles[index].accent,
+  };
+}
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 24 },
+  show: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] as const, delay: 0.1 + i * 0.09 },
+  }),
+};
+
+export default function Hero() {
+  const { text: role, accent: roleAccent } = useTypedRole(ROLES);
+  const reduceMotion = useReducedMotion();
+  const anim = (i: number) =>
+    reduceMotion
+      ? {}
+      : { variants: fadeUp, initial: "hidden" as const, animate: "show" as const, custom: i };
 
   return (
-    <div className="relative h-screen bg-base overflow-hidden">
+    <section
+      id="home"
+      aria-labelledby="hero-title"
+      className="relative flex min-h-svh flex-col overflow-hidden bg-base pt-16 md:pt-24"
+    >
+      {/* Vertical edge labels — editorial framing, desktop only */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute left-0 top-1/2 hidden -translate-y-1/2 -rotate-90 text-[11px] uppercase tracking-[0.18em] text-muted lg:block"
+      >
+        Full stack engineer
+      </span>
+      <span
+        aria-hidden
+        className="pointer-events-none absolute bottom-24 left-0 hidden -rotate-90 text-[11px] tracking-[0.18em] text-muted lg:block"
+      >
+        2026
+      </span>
 
-      {/* ── Navbar ── */}
-      <nav className="absolute top-0 left-0 right-0 z-30 w-full">
-        <div className="flex items-center justify-between px-5 md:px-20 py-5">
-          <div className="flex items-center gap-4 md:gap-6">
-            <Link
-              href="/"
-              className="flex items-center gap-2 text-primary text-[14px] font-bold tracking-[0.08em] uppercase hover:opacity-70 transition-opacity duration-200"
+      <div className="max-w-350 mx-auto flex w-full flex-1 items-center px-5 md:px-12 lg:px-20">
+        <div className="grid w-full items-center gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+
+          {/* ── Copy ───────────────────────────────────────── */}
+          <div className="order-2 flex flex-col items-center text-center lg:order-1 lg:items-start lg:text-left">
+
+            <motion.p
+              {...anim(0)}
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 px-3.5 py-1.5 text-[12px] text-secondary backdrop-blur-sm"
             >
-              SD.
-            </Link>
-            <div className="hidden md:block h-4 w-px bg-border/60" />
-            {/* Desktop links */}
-            <ul className="hidden md:flex items-center gap-7 list-none">
-              {navLinks.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-3.25 font-normal text-primary no-underline tracking-[0.01em] opacity-90 hover:opacity-60 transition-opacity duration-200"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              </span>
+              Available for new projects
+            </motion.p>
 
-          {/* Hamburger */}
-          <button
-            className="md:hidden text-primary p-1"
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-          >
-            {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
-          </button>
-        </div>
+            <motion.h1
+              {...anim(1)}
+              id="hero-title"
+              className="mt-5 text-primary md:mt-7"
+            >
+              <span
+                className="block bg-linear-to-br from-primary via-primary to-accent-work bg-clip-text font-playfair font-normal leading-[0.86] tracking-[-0.035em] text-transparent"
+                style={{ fontSize: "clamp(64px, 12vw, 190px)" }}
+              >
+                Hello
+              </span>
+              <span
+                className="mt-2 block font-light tracking-[-0.02em] md:mt-3"
+                style={{ fontSize: "clamp(20px, 2.4vw, 34px)" }}
+              >
+                It&apos;s{" "}
+                <span className="font-playfair font-semibold">Soumik Debnath</span>
+              </span>
+            </motion.h1>
 
-        {/* Mobile menu */}
-        <AnimatePresence>
-          {menuOpen && (
+            {/* Role — fixed height so the typing never shifts the layout */}
+            <motion.p
+              {...anim(2)}
+              className="mt-3 flex h-7 items-center text-[15px] font-medium tracking-[0.01em] md:mt-4 md:h-8 md:text-[17px]"
+              style={{ color: roleAccent }}
+            >
+              <span
+                aria-hidden
+                className="mr-2 h-px w-6 lg:w-8"
+                style={{ backgroundColor: "currentColor", opacity: 0.5 }}
+              />
+              <span className="sr-only">Full stack engineer, MERN and GenAI developer.</span>
+              <span aria-hidden>
+                {role}
+                <span className="ml-0.5 animate-pulse font-light">|</span>
+              </span>
+            </motion.p>
+
+            <motion.p
+              {...anim(3)}
+              className="mt-4 max-w-[48ch] text-[14px] leading-[1.7] text-secondary md:mt-6 md:text-[16px] md:leading-[1.75]"
+            >
+              I build web products end to end — clean, responsive interfaces backed
+              by fast, reliable APIs, with generative AI woven in where it earns its place.
+            </motion.p>
+
+            {/* ── Calls to action ── */}
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="md:hidden absolute top-full left-0 right-0 bg-base/95 backdrop-blur-md border-t border-border px-5 py-4 flex flex-col gap-1 overflow-hidden"
+              {...anim(4)}
+              className="mt-7 flex w-full items-center gap-2.5 sm:w-auto sm:gap-3 md:mt-10"
             >
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={(e) => handleMobileNavClick(e, link.href)}
-                  className="text-primary text-sm font-normal py-3 border-b border-border/40 last:border-0 no-underline tracking-[0.01em]"
-                >
-                  {link.label}
-                </a>
-              ))}
+              <Link
+                href="/work"
+                className="group inline-flex h-11 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-primary px-4 text-[14px] font-medium text-on-primary no-underline transition-colors duration-200 hover:opacity-85 sm:h-12 sm:flex-none sm:px-6 sm:text-[15px]"
+              >
+                View my work
+                <FiArrowUpRight
+                  size={16}
+                  aria-hidden
+                  className="transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </Link>
+              <a
+                href="#mail"
+                className="inline-flex h-11 flex-1 items-center justify-center whitespace-nowrap rounded-full border border-border px-4 text-[14px] text-primary no-underline transition-colors duration-200 hover:border-primary hover:bg-primary hover:text-on-primary sm:h-12 sm:flex-none sm:px-6 sm:text-[15px]"
+              >
+                Get in touch
+              </a>
             </motion.div>
-          )}
-        </AnimatePresence>
-      </nav>
 
-      {/* ── Left vertical label (desktop only) ── */}
-      <div className="hidden md:flex absolute left-0 top-0 h-full w-7.5 z-20 items-center justify-center">
-        <span className="block -rotate-90 whitespace-nowrap text-secondary text-2.75 tracking-[0.18em] uppercase font-normal">
-          Full stack engineer
-        </span>
-      </div>
-
-      {/* ── Portrait ── */}
-      {/* Desktop: right 56% */}
-      <div className="hidden md:flex absolute top-0 right-0 h-full w-[56%] items-center justify-center">
-        {/* Decorative background glow */}
-        <div className="absolute w-[50%] aspect-square max-w-[500px] bg-neutral-200/30 rounded-full blur-3xl -z-10 pointer-events-none" />
-
-        {/* Circular Portrait Image */}
-        <div className="relative w-56 h-56 md:w-64 md:h-64 lg:w-[360px] lg:h-[360px] xl:w-[420px] xl:h-[420px] 2xl:w-[450px] 2xl:h-[450px] rounded-full overflow-hidden border-4 border-white shadow-[0_15px_45px_rgba(0,0,0,0.08)] bg-neutral-100">
-          <Image
-            src="/portrait.png"
-            alt="Portrait"
-            fill
-            priority
-            sizes="(min-width: 1536px) 450px, (min-width: 1280px) 420px, (min-width: 1024px) 360px, (min-width: 768px) 256px"
-            className="object-cover object-top grayscale hover:grayscale-0 transition-all duration-500 ease-in-out"
-          />
-        </div>
-      </div>
-      {/* Mobile View Container */}
-      <div className="md:hidden flex flex-col items-center justify-between h-full pt-24 pb-8 px-6 relative z-10">
-        {/* Decorative background glow behind the circular image */}
-        <div className="absolute top-[35%] left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-neutral-200/40 rounded-full blur-2xl -z-10 pointer-events-none" />
-
-        {/* Top/Middle Section: Circle Image & Text */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-6 w-full">
-          {/* Circular Portrait Image */}
-          <div className="relative w-56 h-56 sm:w-64 sm:h-64 rounded-full overflow-hidden border-4 border-white shadow-[0_10px_30px_rgba(0,0,0,0.08)] bg-neutral-100 flex-shrink-0">
-            <Image
-              src="/portrait.png"
-              alt="Portrait"
-              fill
-              priority
-              sizes="(max-width: 640px) 224px, 256px"
-              className="object-cover object-top grayscale hover:grayscale-0 transition-all duration-500 ease-in-out"
-            />
-          </div>
-
-          {/* Centered Greeting Text */}
-          <div className="text-center flex flex-col items-center max-w-sm">
-            <h1
-              className="text-primary font-sans font-bold leading-none tracking-[-0.03em] mb-2"
-              style={{ fontSize: "clamp(36px, 10vw, 48px)" }}
+            {/* ── Brand marks ── */}
+            <motion.div
+              {...anim(5)}
+              className="mt-8 hidden items-center gap-4 sm:flex md:mt-12"
             >
-              Hi
-            </h1>
-            <h2
-              className="text-primary font-sans font-normal tracking-[-0.02em] leading-tight mb-3"
-              style={{ fontSize: "clamp(20px, 5.5vw, 24px)" }}
-            >
-              It&apos;s <span className="font-playfair font-semibold">Soumik Debnath</span>
-            </h2>
-
-            {/* Typing indicator & text */}
-            <div className="inline-flex items-center justify-center bg-white/60 backdrop-blur-xs border border-border/50 px-4 py-1.5 rounded-full shadow-xs min-h-[36px]">
-              <p className="text-black text-sm font-semibold tracking-[0.01em] whitespace-nowrap">
-                {displayedText}
-                <span className="animate-pulse text-black ml-0.5">|</span>
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Bottom Section: Logos and Scroll down */}
-        <div className="flex flex-col items-center gap-4 w-full mt-auto">
-          {/* Logos */}
-          <div className="flex items-center justify-center gap-2.5">
-            <Image src="/Developer.png" alt="Developer" width={150} height={50} className="object-contain w-auto h-auto" />
-            <Image src="/GenAi.png" alt="Generative AI" width={85} height={36} className="object-contain w-auto h-auto" />
+              <Image
+                src="/Developer.png"
+                alt="Developer — FullStack Engineer"
+                width={400}
+                height={132}
+                className="h-auto w-31 object-contain md:w-37.5"
+              />
+              <span aria-hidden className="h-6 w-px bg-border" />
+              <Image
+                src="/GenAi.png"
+                alt="Generative AI"
+                width={300}
+                height={132}
+                className="h-auto w-19.5 object-contain md:w-23.5"
+              />
+            </motion.div>
           </div>
 
-          {/* Scroll down */}
-          <a
-            href="#about"
-            className="flex items-center gap-1.5 text-secondary hover:text-primary text-[13px] font-medium tracking-[0.05em] uppercase transition-colors duration-200 no-underline"
+          {/* ── Portrait ───────────────────────────────────── */}
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+            className="order-1 flex justify-center lg:order-2"
           >
-            Scroll down <span className="animate-bounce text-[11px]">↓</span>
-          </a>
+            <div className="relative">
+              <div
+                aria-hidden
+                className="absolute inset-0 -z-10 scale-125 rounded-full bg-neutral-300/25 blur-3xl"
+              />
+              <div className="relative aspect-square w-44 overflow-hidden rounded-full border-4 border-surface bg-elevated shadow-[0_18px_50px_rgba(0,0,0,0.10)] sm:w-56 md:w-72 lg:w-85 xl:w-100">
+                <Image
+                  src="/portrait.png"
+                  alt="Soumik Debnath"
+                  fill
+                  priority
+                  sizes="(min-width: 1280px) 400px, (min-width: 1024px) 340px, (min-width: 768px) 288px, (min-width: 640px) 224px, 176px"
+                  className="object-cover object-top grayscale transition-[filter] duration-500 ease-out hover:grayscale-0"
+                />
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
 
-      {/* ── Hello heading (Desktop only) ── */}
-      <div className="hidden md:block absolute z-20 left-13 top-1/2 -translate-y-1/2 max-w-[42vw]">
-        <h1
-          className="text-primary font-playfair font-normal leading-[0.88] tracking-[-0.03em]"
-          style={{ fontSize: "clamp(110px, 17vw, 300px)" }}
-        >
-          Hello
-        </h1>
-        <p
-          className="text-primary font-normal mt-3.5 tracking-[0.01em] pl-1.75"
-          style={{ fontSize: "clamp(13px, 1.5vw, 30px)" }}
-        >
-          <span className="font-playfair text-black">
-            <span className="font-normal">It&apos;s </span>
-            <span className="font-semibold" style={{ fontSize: "clamp(26px, 3.8vw, 60px)" }}>Soumik Debnath</span>
-          </span>
-        </p>
-        <p
-          className="text-black font-semibold pl-1.75 mt-1 min-h-8"
-          style={{ fontSize: "clamp(13px, 1.5vw, 24px)" }}
-        >
-          {displayedText}
-          <span className="animate-pulse ml-0.5">|</span>
-        </p>
-      </div>
-
-      {/* ── Scroll down (Desktop only) ── */}
-      <div className="hidden md:flex absolute z-20 left-6 bottom-6 md:bottom-8 flex-col">
-        {/* Desktop Logos just above Scroll Down */}
-        <div className="flex items-center gap-2 md:gap-2.5 mb-3 md:mb-4">
-          <Image src="/Developer.png" alt="Developer" width={400} height={132} className="object-contain h-auto w-[120px] md:w-[160px] lg:w-[220px] xl:w-[300px] 2xl:w-[400px]" />
-          <Image src="/GenAi.png" alt="Generative AI" width={300} height={132} className="object-contain h-auto w-[85px] md:w-[110px] lg:w-[160px] xl:w-[210px] 2xl:w-[300px]" />
-        </div>
-        <a
-          href="#about"
-          className="flex items-center gap-1 text-primary text-3.25 font-normal tracking-[0.01em] no-underline mt-1 md:mt-2"
-        >
-          Scroll down <span className="text-sm">↓</span>
-        </a>
-      </div>
-
-      {/* ── 2026 (desktop only) ── */}
-      <div className="hidden md:flex absolute z-20 left-2.5 bottom-25 items-center justify-center h-12 w-3">
-        <span className="block -rotate-90 whitespace-nowrap text-secondary text-2.75 font-normal tracking-wider">
-          2026
-        </span>
-      </div>
-
-    </div>
+  {/* don't add scroll cue */}
+    </section>
   );
 }
